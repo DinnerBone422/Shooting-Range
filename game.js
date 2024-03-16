@@ -1,66 +1,73 @@
 var score =0;
 var gun,bluebubble,redbubble, bullet, backBoard;
-
 var gunImg,bubbleImg, bulletImg, blastImg, backBoardImg;
-
 var redBubbleGroup, redBubbleGroup, bulletGroup;
-
-
 var life =3;
 var score=0;
 var gameState=1
 
 function preload(){
-  gunImg = loadImage("gun1.png")
-  bulletImg = loadImage("bullet1.png")
-  blueBubbleImg = loadImage("waterBubble.png")
-  redBubbleImg = loadImage("redbubble.png")
-  backBoardImg= loadImage("back.jpg")
+  gunImg = loadImage("./Assets/gun1.png")
+  bulletImg = loadImage("./Assets/bullet1.png")
+  blueBubbleImg = loadImage("./Assets/waterBubble.png")
+  redBubbleImg = loadImage("./Assets/redbubble.png")
+  backBoardImg= loadImage("./Assets/back.jpg")
 }
-function setup() {
-  createCanvas(800, 800);
 
+function setup() {
+  //Create the canvas
+  canvasW = windowWidth/1.5;
+  canvasH = windowHeight/1.5;
+  var canvas = createCanvas(canvasW, canvasH);
+  canvas.parent('Game');
+  rectMode(CENTER);
+
+  //Create the backboard as a sprite
   backBoard= createSprite(50, width/2, 100,height);
   backBoard.addImage(backBoardImg)
   
+  //Create the Gun as a sprite
   gun= createSprite(100, height/2, 50,50);
   gun.addImage(gunImg)
   gun.scale=0.2
-  
+
+  //Create the Bullets sprite
   bulletGroup = createGroup();   
   blueBubbleGroup = createGroup();   
   redBubbleGroup = createGroup();   
   
+  //Create the element's to display the score and the life's remaining
   heading= createElement("h1");
   scoreboard= createElement("h1");
 }
 
 function draw() {
+  //Set the background colour
   background("#BDA297");
   
+  //Display the life's remaining
   heading.html("Life: "+life)
   heading.style('color:red'); 
   heading.position(150,20)
 
+  //Display the score
   scoreboard.html("Score: "+score)
   scoreboard.style('color:red'); 
   scoreboard.position(width-200,20)
 
-  if(gameState===1){
-    gun.y=mouseY  
+  //If the player is still alive then do this
+  if (gameState===1) {
+    gun.y=mouseY
 
+    //Create tragets for the player to shoot at
     if (frameCount % 80 === 0) {
       drawblueBubble();
     }
-
     if (frameCount % 100 === 0) {
       drawredBubble();
     }
 
-    if(keyDown("space")){
-      shootBullet();
-    }
-
+    //if the targets hit the backboard
     if (blueBubbleGroup.collide(backBoard)){
       handleGameover(blueBubbleGroup);
     }
@@ -68,6 +75,7 @@ function draw() {
       handleGameover(redBubbleGroup);
     }
     
+    //Do this is the tagets get hit by the bullets
     if(blueBubbleGroup.collide(bulletGroup)){
       handleBubbleCollision(blueBubbleGroup);
     }
@@ -78,8 +86,6 @@ function draw() {
 
     drawSprites();
   }
-    
-  
 }
 
 function drawblueBubble(){
@@ -90,6 +96,7 @@ function drawblueBubble(){
   bluebubble.lifetime = 400;
   blueBubbleGroup.add(bluebubble);
 }
+
 function drawredBubble(){
   redbubble = createSprite(800,random(20,780),40,40);
   redbubble.addImage(redBubbleImg);
@@ -109,23 +116,17 @@ function shootBullet(){
 }
 
 function handleBubbleCollision(bubbleGroup){
-    if (life > 0) {
-       score=score+1;
-    }
-
- 
-    bulletGroup.destroyEach()
-    bubbleGroup.destroyEach()
+  if (life > 0) {
+    score=score+1;
+  }
+  bulletGroup.destroyEach()
+  bubbleGroup.destroyEach()
 }
 
 function handleGameover(bubbleGroup){
-  
-    life=life-1;
-    bubbleGroup.destroyEach();    
-
-    if (life === 0) {
-      gameState=2
-    
-    }
-  
+  life=life-1;
+  bubbleGroup.destroyEach();    
+  if (life === 0) {
+    gameState=2
+  } 
 }
