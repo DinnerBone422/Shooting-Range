@@ -35,25 +35,11 @@ function setup() {
   bulletGroup = createGroup();   
   blueBubbleGroup = createGroup();   
   redBubbleGroup = createGroup();   
-  
-  //Create the element's to display the score and the life's remaining
-  heading= createElement("h1");
-  scoreboard= createElement("h1");
 }
 
 function draw() {
   //Set the background colour
   background("#BDA297");
-  
-  //Display the life's remaining
-  heading.html("Life: "+life)
-  heading.style('color:red'); 
-  heading.position(150,20)
-
-  //Display the score
-  scoreboard.html("Score: "+score)
-  scoreboard.style('color:red'); 
-  scoreboard.position(width-200,20)
 
   //If the player is still alive then do this
   if (gameState===1) {
@@ -86,6 +72,8 @@ function draw() {
 
     drawSprites();
   }
+  text("Life's left: "+ life,10,10);
+  text("Score: "+ score,10,20);
 }
 
 function drawblueBubble(){
